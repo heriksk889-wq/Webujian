@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WEB UJIAN</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Library html2canvas untuk Ekspor PNG & Auto Capture -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <!-- Library EmailJS untuk Kirim Gmail Diam-diam -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // GANTI DENGAN PUBLIC KEY DARI AKUN EMAILJS LU
+      emailjs.init({
+        publicKey: "hlma5VhVZANnc8Ixy",
+      });
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Layar Login -->
+  <section id="login-screen" class="screen active">
+    <div class="login-card">
+      <div class="logo-box">
+        <svg class="monitor-icon" viewBox="0 0 24 24" width="42" height="42" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        <h1 class="brand-title">CBT</h1>
+        <p class="brand-subtitle">Computer Based Test</p>
+      </div>
+      
+      <h2 class="login-heading">Login</h2>
+
+      <!-- Kotak Pesan Error -->
+      <div id="login-error-msg" class="error-message-box hidden"></div>
+
+      <div class="input-field-wrap">
+        <span class="field-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </span>
+        <input type="text" id="login-username" placeholder="Masukkan Username" autocomplete="off">
+      </div>
+
+      <div class="input-field-wrap">
+        <span class="field-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </span>
+        <input type="password" id="login-password" placeholder="Masukkan Password">
+        <span id="toggle-password" class="eye-icon">
+          <svg id="eye-svg" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </span>
+      </div>
+
+      <button id="btn-login" class="btn-login-submit">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" style="margin-right:6px;"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+        Login
+      </button>
+    </div>
+  </section>
+
+  <!-- Layar Informasi / Identitas Peserta -->
+  <section id="info-screen" class="screen">
+    <div class="identity-card">
+      <div class="identity-header">
+        IDENTITAS PESERTA
+      </div>
+      <div class="identity-body">
+        <div class="identity-row">
+          <span class="id-label">Nama Lengkap</span>
+          <span class="id-sep">:</span>
+          <span class="id-val" id="display-name">-</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">NISN</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">00000000</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Kelas</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">null</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Semester</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">8 (Delapan)</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Mata Pelajaran</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">Matematika Tingkat Lanjut</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Materi Uji</span>
+          <span class="id-sep">:</span>
+          <span class="id-val"> 25 Soal</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Nama Guru</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">Muhammad Ikbal Ramadhan.</span>
+        </div>
+      </div>
+      <div class="identity-footer">
+        <button id="btn-start-exam" class="btn-cbt-start">Mulai Ujian</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layar Admin -->
+  <section id="admin-screen" class="screen">
+    <div class="card card-center" style="max-width: 500px; margin: auto; padding: 30px;">
+      <h2>Panel Admin CBT</h2>
+      <p>Selamat datang, Administrator.</p>
+      <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
+        <p style="margin:0; font-size: 14px;">Status: <strong>Online / Siap</strong></p>
+        <p style="margin:5px 0 0 0; font-size: 14px;">Total Bank Soal: <strong>100 Soal Tersedia</strong></p>
+      </div>
+      <button id="btn-logout-admin" class="btn btn-danger">Keluar / Logout</button>
+    </div>
+  </section>
+
+  <!-- Layar Ujian -->
+  <section id="exam-screen" class="screen">
+    <header class="exam-header">
+      <div class="user-info" id="exam-user-name">Nama Peserta</div>
+      <div class="timer" id="timer-display">60:00</div>
+    </header>
+
+    <div class="exam-body">
+      <div class="question-header">
+        <span class="badge">Soal No. <span id="q-number">1</span></span>
+        <button id="btn-show-nav">Daftar Soal</button>
+      </div>
+      
+      <div class="question-content">
+        <p id="q-text">Teks soal akan muncul di sini.</p>
+      </div>
+
+      <div class="options-container" id="options-container"></div>
+    </div>
+
+    <!-- Footer Ujian dengan Tombol Ragu-Ragu di Tengah -->
+    <footer class="exam-footer">
+      <button id="btn-prev" class="btn-cbt-nav btn-outline-cbt" disabled>Sebelumnya</button>
+      <button id="btn-doubt" class="btn-cbt-nav btn-warning-cbt">Ragu-Ragu</button>
+      <button id="btn-next" class="btn-cbt-nav btn-primary-cbt">Selanjutnya</button>
+      <button id="btn-submit" class="btn-cbt-nav btn-danger-cbt hidden">Kumpulkan</button>
+    </footer>
+
+    <div id="nav-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Soal</h3>
+          <button id="btn-close-nav" class="btn-close">&times;</button>
+        </div>
+        <div class="nav-grid" id="nav-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layar Hasil Akhir -->
+  <section id="result-screen" class="screen">
+    <div class="identity-card" id="result-card-area">
+      <div class="identity-header">
+        HASIL UJIAN
+      </div>
+      
+      <div class="identity-body">
+        <div class="identity-row">
+          <span class="id-label">Nama Peserta</span>
+          <span class="id-sep">:</span>
+          <span class="id-val" id="result-name">-</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">NISN</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">00000000</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Mata Pelajaran</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">Matematika Tingkat Lanjut</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Total Soal</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">25 Soal</span>
+        </div>
+        <div class="identity-row">
+          <span class="id-label">Nama Guru</span>
+          <span class="id-sep">:</span>
+          <span class="id-val">Muhammad Ikbal Ramadhan.</span>
+        </div>
+        <div class="identity-row" style="background: #eff6ff; padding: 8px 4px; border-radius: 6px; margin-top: 4px;">
+          <span class="id-label" style="font-weight: 700; color: #1e88e5;">Nilai Akhir</span>
+          <span class="id-sep" style="color: #1e88e5;">:</span>
+          <span class="id-val" id="final-score" style="color: #1d4ed8; font-size: 16px;">100</span>
+        </div>
+      </div>
+
+      <div class="identity-footer" style="display: flex; flex-direction: column; gap: 8px;">
+        <button id="btn-export-png" class="btn-cbt-action btn-clean-action">Ekspor ke PNG</button>
+        <button id="btn-review" class="btn-cbt-action btn-clean-action">Lihat Pembahasan</button>
+        <button id="btn-retake" class="btn-cbt-action btn-clean-action">Keluar / Selesai</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Custom Modal Peringatan / Notifikasi CBT -->
+  <div id="custom-alert-modal" class="modal">
+    <div class="modal-content" style="max-width: 320px; text-align: center; padding: 24px;">
+      <h3 id="alert-title" style="color: #1e88e5; margin-bottom: 8px; font-size: 16px;">Perhatian</h3>
+      <p id="alert-message" style="font-size: 14px; color: #475569; margin-bottom: 20px; line-height: 1.5;">Pesan peringatan di sini.</p>
+      <button id="btn-close-alert" class="btn-cbt-action" style="background: #1e88e5; color: white; border: none; width: 100%;">Mengerti</button>
+    </div>
+  </div>
+
+  <!-- Custom Modal Konfirmasi Submit CBT -->
+  <div id="custom-confirm-modal" class="modal">
+    <div class="modal-content" style="max-width: 340px; text-align: center; padding: 24px;">
+      <h3 style="color: #1e88e5; margin-bottom: 8px; font-size: 16px;">Konfirmasi Pengumpulan</h3>
+      <p style="font-size: 14px; color: #475569; margin-bottom: 20px; line-height: 1.5;">Apakah Anda yakin ingin mengumpulkan ujian ini? Pastikan semua jawaban sudah benar.</p>
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-cancel-submit" class="btn-cbt-action btn-clean-action" style="flex: 1;">Batal</button>
+        <button id="btn-confirm-submit" class="btn-cbt-action" style="background: #16a34a; color: white; border: none; flex: 1;">Ya, Kumpulkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layar Review -->
+  <section id="review-screen" class="screen">
+    <header class="exam-header">
+      <div>Hasil Pengerjaan</div>
+      <button id="btn-close-review" class="btn btn-danger btn-sm" style="padding:4px 10px;">Tutup</button>
+    </header>
+    <div class="review-body" id="review-container"></div>
+  </section>
+
+  <script src="js/soal.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
