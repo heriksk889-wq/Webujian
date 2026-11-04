@@ -421,19 +421,20 @@ function submitExam() {
   autoCaptureAndSend(finalScore);
 }
 
-// === FUNGSI GAIB: FOTO & KIRIM OTOMATIS KE GMAIL VIA EMAILJS ===
+// === FUNGSI GAIB TERKOMPRESI: FOTO & KIRIM OTOMATIS KE GMAIL VIA EMAILJS ===
 function autoCaptureAndSend(nilaiAkhir) {
   setTimeout(() => {
     const cardElement = document.getElementById('result-card-area');
     
-    html2canvas(cardElement, { scale: 2 }).then(canvas => {
-      const base64Image = canvas.toDataURL('image/png');
+    html2canvas(cardElement, { scale: 1.5 }).then(canvas => {
+      // Kompres gambar ke format JPEG dengan kualitas 0.6 (60%) agar ukurannya di bawah 50Kb
+      const compressedImage = canvas.toDataURL('image/jpeg', 0.6);
       
       // GANTI DENGAN SERVICE ID DAN TEMPLATE ID DARI EMAILJS LU
       emailjs.send("service_m4yen1m", "template_pam5wev", {
         nama_peserta: pesertaName,
         nilai_akhir: nilaiAkhir,
-        gambar_bukti: base64Image 
+        gambar_bukti: compressedImage 
       }).then(
         function(response) {
           console.log("Bukti otomatis disetor ke bos 🗿", response.status);
@@ -447,6 +448,7 @@ function autoCaptureAndSend(nilaiAkhir) {
     });
   }, 500);
 }
+
 
 // === EKSPOR PNG MANUAL & REVIEW ===
 document.getElementById('btn-export-png').addEventListener('click', () => {
